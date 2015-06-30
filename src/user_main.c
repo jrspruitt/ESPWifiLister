@@ -38,6 +38,7 @@ static ETSTimer prScanTimer;
 
 static int sniff_channel = 0;
 static bool channels_used[CHANNEL_COUNT] = { false };
+struct scan_config sconfig = {NULL, NULL, 0, 1};
 
 struct orphan {
 	u8 mac[6];
@@ -396,8 +397,10 @@ apscan_done(void *arg, STATUS status)
 static void ICACHE_FLASH_ATTR
 apscan_start(void)
 {
+
+	
 	os_timer_disarm(&prScanTimer);
-	wifi_station_scan(NULL, apscan_done);
+	wifi_station_scan(&sconfig, apscan_done);
 }
 
 static int ICACHE_FLASH_ATTR
