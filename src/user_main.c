@@ -462,7 +462,7 @@ packet_processor(uint8 *buf, uint16 len)
 		if ( memcmp(client, full, 6) == 0 )
 			return;
 
-		if ( client[0] == 0x33 && client[1] == 0x33 && client[2] == 0x00 )
+		if ( client[0] == 0x33 && client[1] == 0x33 )
 			return;
 
 		if ( client[0] == 0x01 && client[1] == 0x00 && client[2] == 0x5e )
