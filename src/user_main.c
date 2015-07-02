@@ -31,7 +31,7 @@ SOFTWARE.
 #define MAX_APS		64
 #define MAX_CLIENTS	32
 #define EXPIRES		3
-#define SNIFF_TIME	3000
+#define SNIFF_TIME	3000	// per channel
 #define CHANNEL_COUNT	15	// plus 1
 
 static ETSTimer prScanTimer;
@@ -350,9 +350,13 @@ wifidata_printer(void)
 			ets_printf("\tRSSI: %ddbm", ap_list[i].clients[c].rssi);
 
 			for ( int z = 0; z < MAX_APS; z++ ) {
+				if ( ap_list[i].expires == 0 )
+					continue;
+
 				if ( memcmp(ap_list[i].clients[c].mac, ap_list[z].bssid, 6) == 0 )
 					ets_printf("\tSSID: %s ", ap_list[z].ssid);
 			}
+
 			ets_printf("\n");
 		}
 		counter++;
@@ -469,7 +473,6 @@ packet_processor(uint8 *buf, uint16 len)
 			return;
 
 		/*
-		ets_printf("%d: ", len);
 		ets_printf("ToDS: %d FromDS:%d ", probe_request->framectrl.ToDS, probe_request->framectrl.FromDS);
 		ets_printf("client: "MACSTR" server: "MACSTR" BSSID: "MACSTR"\n",
 				MAC2STR(client),
